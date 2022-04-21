@@ -19,8 +19,8 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: https://{yourOktaDomain}/oauth2/default
+            issuer-uri: https://<your-okta-domain>/oauth2/default
         registration:
           oidc:
-            client-id: {yourClientId}
-            client-secret: "{yourClientSecret}"
+            client-id: <client-id>
+            client-secret: "<client-secret>"

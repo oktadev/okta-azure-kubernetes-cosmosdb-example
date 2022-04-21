@@ -31,12 +31,12 @@ data:
           client:
             provider:
               oidc:
-                issuer-uri: https://dev-447850.okta.com/oauth2/default
+                issuer-uri: https://<your-okta-domain>/oauth2/default
             registration:
               oidc:
-                client-id: 0oa6ld77f8uiiYDe24x7
-                client-secret: 1qvxF710O46mc0J6owgFggwZg_J8IqdVzLpzJ6rM
-
+                client-id: <client-id>
+                client-secret: "<client-secret>"
+                
   # app specific configuration
   jhipster-registry.yml: |-
     eureka:

@@ -27,23 +27,6 @@ spec:
                         - store
                 topologyKey: kubernetes.io/hostname
               weight: 100
-      initContainers:
-        - name: init-ds
-          image: busybox:latest
-          command:
-            - "/bin/sh"
-            - "-c"
-            - |
-              while true
-              do
-                rt=$(nc -z -w 1 store-mongodb 27017)
-                if [ $? -eq 0 ]; then
-                  echo "DB is UP"
-                  break
-                fi
-                echo "DB is not yet reachable;sleep for 10s before retry"
-                sleep 10
-              done
       containers:
         - name: store-app
           image: andrewcarterhughes/store
@@ -62,13 +45,15 @@ spec:
             - name: SPRING_DATA_MONGODB_DATABASE
               value: store
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://store-mongodb-0.store-mongodb.demo:27017/?waitQueueMultiple=1000,store-mongodb-1.store-mongodb.demo:27017/?waitQueueMultiple=1000,store-mongodb-2.store-mongodb.demo:27017/?waitQueueMultiple=1000"
+              value: "<your-connect-string>"
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
               value: " -Xmx256m -Xms256m"
             - name: SERVER_SHUTDOWN
               value: graceful
+            - name: ENCRYPT_KEY
+              value: <your-encryption-key>
           resources:
             requests:
               memory: "512Mi"
