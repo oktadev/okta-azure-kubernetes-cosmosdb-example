@@ -45,7 +45,10 @@ spec:
             - name: SPRING_DATA_MONGODB_DATABASE
               value: store
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://andrew-9873:MP85RXdWp5VTYrd9TGBLB7p8go4synCDLBdd1fwuciAsRxKAKZJKBmWfrvyKzoNIhooinzsQ2nse7kN6nuqdYA==@andrew-9873.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@andrew-9873@"
+              valueFrom:
+                secretKeyRef:
+                  name: project-secrets
+                  key: SPRING_DATA_MONGODB_URI
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: "x-request-id,x-ot-span-context"
             - name: JAVA_OPTS
