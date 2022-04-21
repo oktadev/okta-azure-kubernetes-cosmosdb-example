@@ -100,6 +100,8 @@ spec:
               value: "true"
             - name: K8S_CONFIG_PATH
               value: "/central-config/"
+            - name: ENCRYPT_KEY
+              value: <your-encryption-key>
           volumeMounts:
             - name: config-volume
               mountPath: /central-config

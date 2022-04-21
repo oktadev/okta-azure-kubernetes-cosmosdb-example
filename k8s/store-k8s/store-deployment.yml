@@ -52,8 +52,6 @@ spec:
               value: " -Xmx256m -Xms256m"
             - name: SERVER_SHUTDOWN
               value: graceful
-            - name: ENCRYPT_KEY
-              value: <your-encryption-key>
           resources:
             requests:
               memory: "512Mi"
