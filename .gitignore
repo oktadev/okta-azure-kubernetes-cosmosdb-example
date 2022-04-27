@@ -1,2 +1,6 @@
 *.env
 secrets.yml
+sealed-secrets.yml
+tls.crt
+.okta.env
+.idea
