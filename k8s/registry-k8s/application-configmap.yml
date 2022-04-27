@@ -34,8 +34,8 @@ data:
                 issuer-uri: https://dev-447850.okta.com/oauth2/default
             registration:
               oidc:
-                client-id: 0oa6ycmlneJOs6wNC4x7
-                client-secret: "{cipher}786174c9090895feda62650f9c768a3ea6b9d52cd49dffff95c27a7712572a1ff2c8fd7b4a7bbd201c84999f8dcd10925da635e5151c65be768ea2c9699b2c28"
+                client-id: <your-client-id>
+                client-secret: "{cipher}<your-encrypted-secret>"
 
   # app specific configuration
   jhipster-registry.yml: |-
