@@ -2,10 +2,11 @@
 
 This example uses a microservice network generated with JHipster 7. It includes four applications: a JHipster registry, an application gateway, a store resource server, and a blog resource server. The store uses an Azure Cosmos DB API for Mongo DB as a persistence store. Take a look at [the blog post]() for this repository for more information.
 
+This project is based on two of Matt Raible's tutorials: [Reactive Java Microservices with Spring Boot and JHipster](https://developer.okta.com/blog/2021/01/20/reactive-java-microservices) and [Kubernetes to the Cloud with Spring Boot and JHipster](https://developer.okta.com/blog/2021/06/01/kubernetes-spring-boot-jhipster). In these tutorials, he builds a reactive Java microservice and shows how to deploy it to Google Cloud (GCP). I have modified the project to work with Azure and Cosmos DB.
+
 **Prerequisites:**
 
 - [Docker](https://docs.docker.com/get-docker/): you'll need to have both **Docker Engine** and **Docker Compose** installed (If you install the docker desktop, this will automatically install both. On Linux, if you install Docker Engine individually, you will have to also [install Docker Compose](https://docs.docker.com/compose/install/)) separately.
-- [Docker Hub](https://hub.docker.com/)
 - [Java 11](https://adoptopenjdk.net/): this post requires Java 11. If you need to manage multiple Java versions, SDKMAN! is a good solution. Check out [their docs to install it](https://sdkman.io/installit).
 - [Okta CLI](https://cli.okta.com/manual/#installation)
 - [Azure Cloud account](https://azure.microsoft.com/en-us/free/): they offer a free-tier account with a $200 credit to start
@@ -14,160 +15,137 @@ This example uses a microservice network generated with JHipster 7. It includes 
 
 **Table of Contents**
 
-* [Getting Started](#getting-started)
+* [Clone the Project](#clone-the-project)
+* [Create the Azure Cosmos DB database](#create-the-azure-cosmos-db-database)
+* [Configure Okta OAuth](#configure-okta-oath)
+* [Build the Docker Images and Run App](build-the-docker-images-and-run-app)
 * [Links](#links)
 * [Help](#help)
 * [License](#license)
 
-## Getting Started
+## Clone the Project
 
 To install this example, run the following commands:
 
 ```bash
-git clone https://github.com/oktadev/java-microservices-examples.git
-cd java-microservices-examples/jhipster-k8s/k8s
+git clone https://github.com/oktadev/<repo-name>.git
+cd <repo-name>
 ```
 
-If you don't have JHipster installed, install it.
+## Create the Azure Cosmos DB database
 
-```shell
-npm i -g generator-jhipster@7
+Log into the Azure CLI using a Bash shell. 
+
+```bash
+az login
 ```
 
-Run JHipster's [Kubernetes sub-generator](https://www.jhipster.tech/kubernetes/).
+This should show you the subscriptions for your account. The default subscription name for me was `Azure subscription 1`.
 
-```shell
-jhipster k8s
-```
-
-You will be prompted with several questions. The answers will be pre-populated from choices I made when creating this app. Answer as follows, changing the Docker repository name to yours, or leaving it blank if you don't have one.
-
-- Type of application: **Microservice application**
-- Root directory: **../**
-- Which applications? `<select all>`
-- Set up monitoring? **No**
-- Which applications with clustered databases? select **store**
-- Admin password for JHipster Registry: `<generate one>`
-- Kubernetes namespace: **demo**
-- Docker repository name: `<your docker hub username>`
-- Command to push Docker image: `docker push`
-- Enable Istio? **No**
-- Kubernetes service type? **LoadBalancer**
-- Use dynamic storage provisioning? **Yes**
-- Use a specific storage class? `<leave empty>`
-
-## Install Minikube to Run Kubernetes Locally
-
-If you have Docker installed, you can run Kubernetes locally with Minikube. Run `minikube start` to begin.
-
-```shell
-minikube --memory 8g --cpus 8 start
-```
-
-Build Docker images for each app. In the {`gateway`, `blog`, `store` } directories, run the following Gradle command (where `<image-name>` is `gateway`, `store`, or `blog`).
-
-```shell
-./gradlew bootJar -Pprod jib -Djib.to.image=<docker-repo-name>/<image-name>
-```
-
-> You can also build your images locally and publish them to your Docker daemon. This is the default if you didn't specify a base Docker repository name.
->
-> ```shell
-> # this command exposes Docker images to minikube
-> eval $(minikube docker-env)
-> ./gradlew -Pprod bootJar jibDockerBuild
-> ```
->
-> Because this publishes your images locally to Docker, you'll need to make modifications to your Kubernetes deployment files to use `imagePullPolicy: IfNotPresent`.
->
-> ```yaml
-> - name: gateway-app
->   image: gateway
->   imagePullPolicy: IfNotPresent
-> ```
->
-> Make sure to add this `imagePullPolicy` to the following files:
->
-> - `k8s/gateway-k8s/gateway-deployment.yml`
-> - `k8s/blog-k8s/blog-deployment.yml`
-> - `k8s/store-k8s/store-deployment.yml`
-
-## Register an OIDC App for Auth
-
-Install the Okta CLI using the instructions on [cli.okta.com](https://cli.okta.com) and come back here when you're done. If you don't have an Okta developer account, run `okta register`.
-
-**NOTE**: You can also use your browser and Okta's developer console to register an app. See [JHipster's security documentation](https://www.jhipster.tech/security/#okta) for those instructions.
-
-From the gateway project's directory, run `okta apps create jhipster`. Accept the default redirect URIs.
-
-This process does several things:
-
-1. Registers an OIDC app in Okta with JHipster's configured redirect URIs.
-2. Creates `ROLE_ADMIN` and `ROLE_USER` groups and adds your user to both.
-3. Creates a `groups` claim and adds it to ID tokens.
-4. Creates a `.okta.env` file with the values you'll need to talk to Okta.
-
-Update `k8s/registry-k8s/application-configmap.yml` to contain your OIDC settings from the `.okta.env` file the Okta CLI just created. The Spring Cloud Config server reads from this file and shares the values with the gateway and microservices.
-
-```yaml
-data:
-  application.yml: |-
+```bash
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "21c44b6d-a007-4d48-80cb-c45966ca1af9",
+    "id": "90eb9f51-b4be-4a9f-a69f-11b7668a874d",
+    "isDefault": true,
+    "name": "Azure subscription 1",
     ...
-    spring:
-      security:
-        oauth2:
-          client:
-            provider:
-              oidc:
-                issuer-uri: https://<your-okta-domain>/oauth2/default
-            registration:
-              oidc:
-                client-id: <client-id>
-                client-secret: <client-secret>
+  }
+]
 ```
 
-To configure the JHipster Registry to use OIDC for authentication, modify `k8s/registry-k8s/jhipster-registry.yml` to enable the `oauth2` profile.
+Make sure your subscription is set to the default.
+
+```bash
+az account set --subscription <you-subscription-name>
+```
+
+Create a resource group with the following command.
+
+```bash
+az group create --name australia-east --location australiaeast
+```
+
+Create the Cosmos DB account in the resource group. Substitute your Azure subscription name in the command below.
+
+```bash
+az cosmosdb create --name jhipster-cosmosdb --resource-group australia-east --kind MongoDB --subscription <you-subscription-name> --enable-free-tier true --enable-public-network true
+```
+
+If you get an error that says`(BadRequest) DNS record for cosmosdb under zone Document is already taken.`, you need to change the `--name` parameter to something else. Since this is used to generate the public URI for the database it needs to be unique across Azure. Try adding your name or a few random numbers.
+
+This may take a few minutes.
+
+Retrieve the primary Mongo DB connection string using the following command. **If you changed the database name above, you will need to update it in the command below.**
+
+```bash
+az cosmosdb keys list --type connection-strings --name jhipster-cosmosdb --resource-group australia-east
+```
+
+Add a `.env` file in the `docker-compose` subdirectory. It needs to contain this connection string (`SPRING_DATA_MONGO_URI`).
+
+`docker-compose/.env`
+
+```env
+SPRING_DATA_MONGO_URI="<your-connection-string>"
+```
+
+## Configure Okta OAuth
+
+
+
+If you already have an Okta account, use `okta login` to log into that account with the CLI. Otherwise, use `okta register` to sign up for a free account. 
+
+Create the OIDC app using the following command using a Bash shell opened to the project root.
+
+```bash
+okta apps create jhipster
+```
+
+You can accept the default values by pressing **enter**. 
+
+This creates `.okta.env`. 
+
+Use those values to fill in the `issuer-uri`, `client-id`, and `client-secret` in the central server config `application.yml` file.
+
+`docker-compose/central-server-config/application.yml`
 
 ```yaml
-- name: SPRING_PROFILES_ACTIVE
-  value: prod,k8s,oauth2
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: https://<your-okta-uri/oauth2/default
+        registration:
+          oidc:
+            client-id: <your-client-id>
+            client-secret: "{cipher}<your-encrypted-key>"
 ```
 
-Then, in the `k8s` directory, start your engines!
+Ignore the stuff about cipher and encryption for the `client-secret`. Just for the purposes of getting the app running, put your client secret there. However, **leaving secrets in config files that are checked into repositories is a security risk**. The tutorial shows you how to avoid this. 
 
-```shell
-./kubectl-apply.sh -f
+## Build the Docker Images and Run App
+
+Build the docker image for each of the projects: `gateway`, `store`, and `blog`.
+
+ In the three different app directories, run the following Gradle command.
+
+```
+./gradlew -Pprod bootJar jibDockerBuild
 ```
 
-You can see if everything starts up using the following command.
+Navigate to the `docker-compose` directory and run the app.
 
-```shell
-kubectl get pods -n default
+```bash
+docker-compose up
 ```
 
-You can use the name of a pod with `kubectl logs` to tail its logs.
+Give that a minute or two to finish running all the services. 
 
-```shell
-kubectl logs <pod-name> --tail=-1 -n default
-```
-
-You can use port-forwarding to see the JHipster Registry.
-
-```shell
-kubectl port-forward svc/jhipster-registry -n default 8761
-```
-
-Open a browser and navigate to `http://localhost:8761`. You'll need to sign in with your Okta credentials.
-
-Once all is green, use port-forwarding to see the gateway app.
-
-```shell
-kubectl port-forward svc/gateway -n default 8080
-```
-
-Then, go to `http://localhost:8080`, and you should be able to add blogs, posts, tags, and products.
-
-Please read the [Kubernetes to the Cloud with Spring Boot and JHipster][blog] for more information.
+Open the gateway service: http://localhost:8080/
 
 ## Links
 
