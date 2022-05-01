@@ -149,6 +149,26 @@ You'll be directed to the Okta login form to sign in.
 
 Once all the services are green, open the gateway service: http://localhost:8080/
 
+## Cleaning Up
+
+You can delete the Azure resource group, which includes the database.
+
+```bash
+az group delete --name australia-east --no-wait --yes
+```
+
+You can delete all the resources created by docker compose with the following command (run from the `docker-compose` directory).
+
+```bash
+ docker-compose down -v --remove-orphans
+```
+
+And remove the local images:
+
+```bash
+docker image rm blog store gateway
+```
+
 ## Links
 
 This example uses the following open source libraries:
