@@ -93,8 +93,6 @@ SPRING_DATA_MONGO_URI="<your-connection-string>"
 
 ## Configure Okta OAuth
 
-
-
 If you already have an Okta account, use `okta login` to log into that account with the CLI. Otherwise, use `okta register` to sign up for a free account. 
 
 Create the OIDC app using the following command using a Bash shell opened to the project root.
@@ -107,7 +105,7 @@ You can accept the default values by pressing **enter**.
 
 This creates `.okta.env`. 
 
-Use those values to fill in the `issuer-uri`, `client-id`, and `client-secret` in the central server config `application.yml` file.
+Use the values from `.okta.env` to fill in the `issuer-uri`, `client-id`, and `client-secret` in the central server config `application.yml` file.
 
 `docker-compose/central-server-config/application.yml`
 
@@ -143,9 +141,13 @@ Navigate to the `docker-compose` directory and run the app.
 docker-compose up
 ```
 
-Give that a minute or two to finish running all the services. 
+Give that a minute or two to finish running all the services.
 
-Open the gateway service: http://localhost:8080/
+You can check out the registry at:  http://localhost:8761/
+
+You'll be directed to the Okta login form to sign in.
+
+Once all the services are green, open the gateway service: http://localhost:8080/
 
 ## Links
 
