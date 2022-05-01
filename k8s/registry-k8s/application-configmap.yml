@@ -31,7 +31,7 @@ data:
           client:
             provider:
               oidc:
-                issuer-uri: https://dev-447850.okta.com/oauth2/default
+                issuer-uri: https://<your-okta-uri>/oauth2/default
             registration:
               oidc:
                 client-id: <your-client-id>

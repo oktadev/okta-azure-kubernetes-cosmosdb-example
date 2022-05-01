@@ -1,8 +1,18 @@
-# Kubernetes + Reactive Java with JHipster Example
- 
-This example uses JHipster 7 to generate Kubernetes deployment descriptors and deploy your microservice architecture to Minikue and Google Cloud (GKE). See [Kubernetes to the Cloud with Spring Boot and JHipster][blog] to see how it was built.
+# Azure Cosmos DB + Kubernetes + JHipster Example
 
-**Prerequisites:** [Java 11](https://sdkman.io/sdks#java) and [Docker](https://docs.docker.com/engine/install/).
+This example uses a microservice network generated with JHipster 7. It includes four applications: a JHipster registry, an application gateway, a store resource server, and a blog resource server. The store uses an Azure Cosmos DB API for Mongo DB as a persistence store. Take a look at [the blog post]() for this repository for more information.
+
+**Prerequisites:**
+
+- [Docker](https://docs.docker.com/get-docker/): you'll need to have both **Docker Engine** and **Docker Compose** installed (If you install the docker desktop, this will automatically install both. On Linux, if you install Docker Engine individually, you will have to also [install Docker Compose](https://docs.docker.com/compose/install/)) separately.
+- [Docker Hub](https://hub.docker.com/)
+- [Java 11](https://adoptopenjdk.net/): this post requires Java 11. If you need to manage multiple Java versions, SDKMAN! is a good solution. Check out [their docs to install it](https://sdkman.io/installit).
+- [Okta CLI](https://cli.okta.com/manual/#installation)
+- [Azure Cloud account](https://azure.microsoft.com/en-us/free/): they offer a free-tier account with a $200 credit to start
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)
+
+**Table of Contents**
 
 * [Getting Started](#getting-started)
 * [Links](#links)
