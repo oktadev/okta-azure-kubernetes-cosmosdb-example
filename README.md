@@ -1,6 +1,6 @@
 # Azure Cosmos DB + Kubernetes + JHipster Example
 
-This example uses a microservice network generated with JHipster 7. It includes four applications: a JHipster registry, an application gateway, a store resource server, and a blog resource server. The store uses an Azure Cosmos DB API for Mongo DB as a persistence store. Take a look at [the blog post]() for this repository for more information.
+This example uses a microservices architecture generated with JHipster 7. It includes four applications: a JHipster registry, an application gateway, a store resource server, and a blog resource server. The store uses an Azure Cosmos DB API for Mongo DB as a persistence store. Take a look at [the blog post][blog] for this repository for more information.
 
 This project is based on two of Matt Raible's tutorials: [Reactive Java Microservices with Spring Boot and JHipster](https://developer.okta.com/blog/2021/01/20/reactive-java-microservices) and [Kubernetes to the Cloud with Spring Boot and JHipster](https://developer.okta.com/blog/2021/06/01/kubernetes-spring-boot-jhipster). In these tutorials, he builds a reactive Java microservice and shows how to deploy it to Google Cloud (GCP). I have modified the project to work with Azure and Cosmos DB.
 
@@ -189,4 +189,4 @@ Please post any questions as comments on [this example's blog post][blog], or on
 
 Apache 2.0, see [LICENSE](LICENSE).
 
-[blog]: https://developer.okta.com/blog/2021/06/01/kubernetes-spring-boot-jhipster
+[blog]: https://developer.okta.com/blog/2022/05/05/kubernetes-microservices-azure
