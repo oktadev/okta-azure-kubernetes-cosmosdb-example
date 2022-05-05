@@ -28,8 +28,8 @@ This project is based on two of Matt Raible's tutorials: [Reactive Java Microser
 To install this example, run the following commands:
 
 ```bash
-git clone https://github.com/oktadev/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/oktadev/okta-azure-kubernetes-cosmosdb-example.git
+cd okta-azure-kubernetes-cosmosdb-example
 ```
 
 ## Create the Azure Cosmos DB database
