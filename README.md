@@ -88,7 +88,7 @@ Add a `.env` file in the `docker-compose` subdirectory. It needs to contain this
 `docker-compose/.env`
 
 ```env
-SPRING_DATA_MONGO_URI="<your-connection-string>"
+SPRING_DATA_MONGO_URI=<your-connection-string>
 ```
 
 ## Configure Okta OAuth
@@ -101,9 +101,7 @@ Create the OIDC app using the following command using a Bash shell opened to the
 okta apps create jhipster
 ```
 
-You can accept the default values by pressing **enter**. 
-
-This creates `.okta.env`. 
+You can accept the default values by pressing **enter**. This creates `.okta.env`. 
 
 Use the values from `.okta.env` to fill in the `issuer-uri`, `client-id`, and `client-secret` in the central server config `application.yml` file.
 
@@ -129,7 +127,7 @@ Ignore the stuff about cipher and encryption for the `client-secret`. Just for t
 
 Build the docker image for each of the projects: `gateway`, `store`, and `blog`.
 
- In the three different app directories, run the following Gradle command.
+In the three different app directories, run the following Gradle command.
 
 ```
 ./gradlew -Pprod bootJar jibDockerBuild
@@ -143,11 +141,11 @@ docker-compose up
 
 Give that a minute or two to finish running all the services.
 
-You can check out the registry at:  http://localhost:8761/
+You can check out the registry at `http://localhost:8761`.
 
 You'll be directed to the Okta login form to sign in.
 
-Once all the services are green, open the gateway service: http://localhost:8080/
+Once all the services are green, open the gateway service: `http://localhost:8080`
 
 ## Cleaning Up
 
