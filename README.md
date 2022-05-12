@@ -156,7 +156,7 @@ You can delete the Azure resource group, which includes the database.
 ```bash
 az group delete --name australia-east
 ```
-This will take several minutes to finish. Once it is done, it is a good idea to log into the [Azure Portal](https://portal.azure.com) and make sure all of the resouces have been deleted: the resoure group, the Cosmos DB instance, and the AKS group.
+This will take several minutes to finish. Once it is done, it is a good idea to log into the [Azure Portal](https://portal.azure.com) and make sure all of the resources have been deleted: the resource group, the Cosmos DB instance, and the AKS group.
 
 You can delete all the resources created by docker compose with the following command (run from the `docker-compose` directory).
 
